@@ -21,12 +21,17 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
-    - name: Generate Gradle Wrapper
+    - name: Download Gradle Wrapper
       run: |
-        # 安装 gradle 来生成 wrapper
-        sudo apt-get update
-        sudo apt-get install -y gradle
-        gradle wrapper --gradle-version 8.4
+        # 下载 gradle wrapper 文件
+        mkdir -p gradle/wrapper
+        curl -L -o gradle/wrapper/gradle-wrapper.jar https://github.com/gradle/gradle/raw/v8.4.0/gradle/wrapper/gradle-wrapper.jar
+        curl -L -o gradle/wrapper/gradle-wrapper.properties https://github.com/gradle/gradle/raw/v8.4.0/gradle/wrapper/gradle-wrapper.properties
+        
+    - name: Fix line endings and grant execute permission
+      run: |
+        sed -i 's/\r$//' gradlew
+        chmod +x gradlew
         
     - name: Build with Gradle
       run: ./gradlew assembleDebug
@@ -36,3 +41,4 @@ jobs:
       with:
         name: app-debug
         path: app/build/outputs/apk/debug/app-debug.apk
+
