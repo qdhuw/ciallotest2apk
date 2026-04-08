@@ -12,3 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+include ':app'
+rootProject.name = "SoundClickApp"
